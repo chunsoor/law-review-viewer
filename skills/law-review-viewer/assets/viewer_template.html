@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>법률검토</title>
+<style>
+:root{
+  --g50:#f9fafb; --g100:#f2f4f6; --g200:#e5e8eb; --g300:#d1d6db; --g400:#b0b8c1;
+  --g500:#8b95a1; --g600:#6b7684; --g700:#4e5968; --g800:#333d4b; --g900:#191f28;
+  --blue:#3182f6; --blue50:#e8f3ff; --blue700:#1b64da;
+  --red:#e42939; --orange:#e45600; --orange50:#fff3e0; --green:#027648;
+  --w:800px;
+  --font:"Pretendard Variable",Pretendard,"Pretendard GOV",-apple-system,BlinkMacSystemFont,system-ui,"Segoe UI Variable Text","Segoe UI","Apple SD Gothic Neo","Malgun Gothic","맑은 고딕","Noto Sans KR",sans-serif;
+  --num:"Segoe UI",Arial,"Malgun Gothic",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--g100); color:var(--g900); font-family:var(--font);
+  font-size:17px; line-height:1.5; letter-spacing:-.02em;
+  word-break:keep-all; overflow-wrap:anywhere; color-scheme:light only;
+  min-width:880px; padding-bottom:80px;
+}
+h1,h2,h3{margin:0; letter-spacing:-.03em; font-weight:700}
+p{margin:0}
+button{font-family:inherit; font-size:15px; letter-spacing:-.02em; cursor:pointer; border:0; background:none; color:inherit}
+table{border-collapse:collapse}
+.num{font-family:var(--num); font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1,"lnum" 1; letter-spacing:0}
+mark{background:#fff3b0; color:inherit; padding:0 1px; border-radius:2px}
+
+/* ---------- 상단 바 ---------- */
+.top{position:sticky; top:0; z-index:30; background:rgba(255,255,255,.94); border-bottom:1px solid var(--g200)}
+.topin{width:var(--w); margin:0 auto; height:60px; display:flex; align-items:center; gap:10px}
+.brand{font-size:16px; font-weight:700; margin-right:auto; overflow:hidden; line-height:1.25; max-height:40px}
+.brand small{display:block; font-size:12px; font-weight:400; color:var(--g500); letter-spacing:-.01em}
+.seg{display:flex; background:var(--g100); border-radius:10px; padding:3px}
+.seg button{padding:6px 14px; border-radius:8px; color:var(--g600); font-weight:700}
+.seg button.on{background:#fff; color:var(--g900)}
+.tbtn{padding:8px 12px; border-radius:10px; color:var(--g700); font-weight:700; white-space:nowrap}
+.tbtn:hover{background:var(--g100)}
+.ico{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; vertical-align:-4px}
+
+/* ---------- 레이아웃 ---------- */
+.wrap{width:var(--w); margin:0 auto; padding:28px 0 0}
+.wide .wrap{width:1120px}
+.card{background:#fff; border-radius:16px; padding:24px; margin-bottom:12px}
+.sec{margin-top:32px}
+.sec-h{font-size:15px; font-weight:700; color:var(--g600); margin-bottom:10px; padding-left:2px}
+
+/* ---------- 헤더 ---------- */
+.hero{padding:28px 24px 24px}
+.hero .st{display:inline-block; font-size:13px; font-weight:700; color:var(--blue700); background:var(--blue50); padding:4px 10px; border-radius:6px; margin-bottom:12px}
+.hero h1{font-size:26px; line-height:1.35}
+.hero .sub{color:var(--g600); font-size:15px; margin-top:6px}
+.metaline{display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:16px; padding-top:16px; border-top:1px solid var(--g200); font-size:14px; color:var(--g600)}
+.metaline b{color:var(--g800); font-weight:700}
+.headline{background:var(--g900); color:#fff; border-radius:16px; padding:22px 24px; font-size:19px; font-weight:700; line-height:1.55; letter-spacing:-.03em}
+
+/* ---------- KPI ---------- */
+.kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:10px}
+.kpi{background:#fff; border-radius:16px; padding:18px 16px}
+.kpi .l{font-size:13px; color:var(--g600); margin-bottom:6px}
+.kpi .v{font-size:24px; font-weight:700; letter-spacing:-.04em}
+.kpi .v .u{font-size:15px; font-weight:400; color:var(--g600); margin-left:2px; letter-spacing:-.02em}
+.kpi.b .v{color:var(--blue700)}
+.kpi.r .v{color:var(--red)}
+
+/* ---------- 필터 ---------- */
+.chips{display:flex; flex-wrap:wrap; gap:6px; margin:18px 0 10px}
+.chip{padding:7px 14px; border-radius:999px; background:#fff; color:var(--g600); font-size:14px; font-weight:700; border:1px solid var(--g200)}
+.chip.on{background:var(--g900); color:#fff; border-color:var(--g900)}
+
+/* ---------- 항목 카드 ---------- */
+.row{background:#fff; border-radius:16px; padding:20px 22px; margin-bottom:10px; display:block; width:100%; text-align:left; border:1px solid transparent}
+.row:hover{border-color:var(--g300)}
+.row .l1{display:flex; align-items:center; gap:8px; margin-bottom:8px}
+.badge{font-size:12px; font-weight:700; padding:3px 8px; border-radius:6px; background:var(--g100); color:var(--g700)}
+.badge.seq{background:var(--g900); color:#fff; min-width:26px; text-align:center}
+.badge.ch{background:var(--orange50); color:var(--orange)}
+.row .l2{display:flex; align-items:baseline; gap:12px}
+.row h3{font-size:19px; flex:1}
+.row .amt{font-size:22px; font-weight:700; letter-spacing:-.04em; white-space:nowrap}
+.amt.c-red{color:var(--red)} .amt.c-orange{color:var(--orange)} .amt.c-green{color:var(--green)} .amt.c-gray{color:var(--g700)}
+.ex{display:inline-block; font-size:11px; font-weight:700; color:var(--g600); background:var(--g100); border-radius:5px; padding:2px 6px; vertical-align:2px; letter-spacing:-.01em}
+.row .l3{margin-top:10px; font-size:14px; color:var(--g600); line-height:1.6}
+.row .refs{margin-top:10px; display:flex; flex-wrap:wrap; gap:5px}
+.pill{font-size:12px; color:var(--g600); background:var(--g50); border:1px solid var(--g200); border-radius:6px; padding:3px 8px}
+.row .go{margin-top:12px; font-size:14px; color:var(--blue700); font-weight:700}
+
+/* ---------- 상세 ---------- */
+.back{margin-bottom:14px; font-weight:700; color:var(--g600); padding:6px 10px 6px 4px; border-radius:8px}
+.back:hover{background:#fff}
+.dhead{padding:26px 24px}
+.dhead h2{font-size:24px; line-height:1.35; margin:10px 0 8px}
+.dhead .q{color:var(--g600); font-size:15px}
+.dres{display:flex; align-items:flex-end; gap:14px; margin-top:20px; padding-top:18px; border-top:1px solid var(--g200)}
+.dres .big{font-size:34px; font-weight:700; letter-spacing:-.05em; line-height:1.1}
+.dres .cert{font-size:13px; font-weight:700; padding:4px 10px; border-radius:6px; background:var(--g100); color:var(--g700); margin-bottom:5px}
+.dnote{margin-top:14px; background:var(--g50); border-radius:12px; padding:14px 16px; font-size:15px; color:var(--g800); line-height:1.6}
+.dnote .k{font-size:13px; color:var(--g500); font-weight:700; display:block; margin-bottom:3px}
+.dnote+.dnote{margin-top:8px}
+
+.step{background:#fff; border-radius:16px; padding:22px 24px; margin-bottom:0}
+.step .sh{display:flex; align-items:center; gap:10px; margin-bottom:12px}
+.step .sh .n{width:26px; height:26px; border-radius:8px; background:var(--g900); color:#fff; font-size:14px; font-weight:700; display:flex; align-items:center; justify-content:center; flex:none}
+.step .t{font-size:15px; font-weight:700; color:var(--g600)}
+.step .gist{font-size:18px; font-weight:700; line-height:1.55; letter-spacing:-.03em; margin-bottom:16px}
+.arrow{display:flex; align-items:center; gap:8px; padding:10px 24px; color:var(--g600); font-size:14px; line-height:1.5}
+.arrow .bar{width:2px; height:20px; background:var(--g300); margin-left:12px; flex:none}
+
+.ref{border:1px solid var(--g200); border-radius:12px; overflow:hidden; margin-top:10px}
+.ref .rl{background:var(--g50); padding:10px 14px; font-size:14px; font-weight:700; color:var(--g800); border-bottom:1px solid var(--g200); display:flex; justify-content:space-between; align-items:center; gap:10px}
+.ref .rs{font-size:12px; font-weight:400; color:var(--g500); white-space:nowrap}
+.ref .rt{padding:14px; font-size:15px; line-height:1.75; color:var(--g800)}
+.ref .rt p+p{margin-top:8px}
+.ref .rn{padding:0 14px 14px; font-size:13px; color:var(--g600); line-height:1.6}
+.amd{font-size:12px; color:var(--g400); letter-spacing:0}
+.ref .rn b{color:var(--g800)}
+.lawtbl{width:100%; font-size:14px; table-layout:fixed}
+.lawtbl th{background:var(--g50); color:var(--g600); font-weight:700; font-size:13px; padding:8px 10px; border-bottom:1px solid var(--g200); border-right:1px solid var(--g200); text-align:center}
+.lawtbl td{padding:9px 10px; border-bottom:1px solid var(--g200); border-right:1px solid var(--g200); color:var(--g800); line-height:1.6; vertical-align:top}
+.lawtbl th:last-child,.lawtbl td:last-child{border-right:0}
+.lawtbl tr:last-child td{border-bottom:0}
+.lawtbl td.n{text-align:center; word-break:keep-all; font-family:var(--num); font-variant-numeric:tabular-nums}
+.lawtbl tr.hl td{background:#fff9e0}
+.lawtbl tr.hl td.n{font-weight:700; color:var(--g900)}
+.refcap{padding:10px 14px 0; font-size:13px; color:var(--g600)}
+
+.concl{background:var(--blue50); border-radius:16px; padding:22px 24px; margin-top:12px}
+.concl .k{font-size:13px; font-weight:700; color:var(--blue700); margin-bottom:8px}
+.concl .v{font-size:20px; font-weight:700; line-height:1.5; letter-spacing:-.03em}
+.concl .m{margin-top:8px; font-size:15px; color:var(--g700); line-height:1.6}
+
+/* ---------- 표 보기 ---------- */
+.xls{width:100%; font-size:14px; background:#fff; border-radius:12px; overflow:hidden}
+.xls th{background:var(--g100); color:var(--g700); font-size:13px; font-weight:700; padding:10px 10px; border:1px solid var(--g200); white-space:nowrap}
+.xls td{padding:10px; border:1px solid var(--g200); vertical-align:top; line-height:1.6; color:var(--g800)}
+.xls tr:hover td{background:var(--g50)}
+.xls td.c{text-align:center; white-space:nowrap}
+.xls td.amt2{text-align:right; white-space:nowrap; font-weight:700; font-family:var(--num)}
+.xls td.tt{font-weight:700; color:var(--g900); cursor:pointer}
+.xls td.tt:hover{color:var(--blue700); text-decoration:underline}
+.xls tfoot td{background:var(--g50); font-weight:700; color:var(--g900)}
+
+/* ---------- 기타 ---------- */
+.foot{margin-top:28px; padding:20px 24px; background:#fff; border-radius:16px; font-size:13px; color:var(--g600); line-height:1.8}
+.foot h4{margin:0 0 8px; font-size:13px; color:var(--g800)}
+.foot .ll{display:flex; gap:8px; flex-wrap:wrap}
+.foot .ll span{background:var(--g50); border:1px solid var(--g200); border-radius:6px; padding:3px 8px}
+.act{display:flex; gap:8px; margin-top:14px; flex-wrap:wrap}
+.btn{padding:11px 16px; border-radius:12px; background:var(--g900); color:#fff; font-weight:700; font-size:15px}
+.btn.s{background:var(--g100); color:var(--g700)}
+.btn:hover{opacity:.88}
+.toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); background:var(--g900); color:#fff; padding:13px 20px; border-radius:12px; font-size:15px; font-weight:700; opacity:0; pointer-events:none; transition:.18s; z-index:60}
+.toast.on{opacity:1; transform:translateX(-50%) translateY(0)}
+.hint{font-size:13px; color:var(--g500); margin-top:10px; line-height:1.6}
+dialog{border:0; border-radius:16px; padding:0; width:640px; max-width:92vw}
+dialog::backdrop{background:rgba(0,0,0,.4)}
+.dlg{padding:24px}
+.dlg h3{font-size:19px; margin-bottom:8px}
+.dlg p{font-size:14px; color:var(--g600); line-height:1.7}
+.dlg textarea{width:100%; height:200px; margin-top:12px; border:1px solid var(--g200); border-radius:12px; padding:12px; font-family:var(--font); font-size:14px; line-height:1.6; resize:vertical}
+.drop{margin-top:14px; border:2px dashed var(--g300); border-radius:12px; padding:22px; text-align:center; color:var(--g600); font-size:14px}
+.drop.over{border-color:var(--blue); background:var(--blue50); color:var(--blue700)}
+
+/* ---------- 보고서(캡처) 모드 ---------- */
+body.report{background:#fff}
+body.report .top,body.report .chips,body.report .act,body.report .back,body.report .row .go,body.report .hint{display:none !important}
+body.report .wrap{outline:1px dashed var(--g300); outline-offset:14px; padding-top:10px}
+body.report .card,body.report .row,body.report .step,body.report .kpi,body.report .foot{border:1px solid var(--g200)}
+.phead{display:none; font-size:10pt; color:var(--g600); border-bottom:1px solid var(--g200); padding-bottom:6px; margin-bottom:10px}
+@media print{ .phead{display:block} }
+.rx{display:none; position:fixed; right:16px; top:16px; z-index:50; background:var(--g900); color:#fff; padding:9px 14px; border-radius:10px; font-weight:700; opacity:.55}
+.rx:hover{opacity:1}
+body.report .rx{display:block}
+.capnote{display:none}
+body.report .capnote{display:block; font-size:12px; color:var(--g400); margin:0 0 6px}
+
+/* ---------- 인쇄 ---------- */
+@page{size:A4 portrait; margin:14mm 16mm}
+@page wide{size:A4 landscape; margin:10mm 12mm}
+@media print{
+  html,body{background:#fff !important; min-width:0; font-size:11pt}
+  *{-webkit-print-color-adjust:exact !important; print-color-adjust:exact !important}
+  .top,.chips,.act,.back,.toast,.hint,.capnote,.rx,.row .go{display:none !important}
+  .xls th{width:auto !important}
+  .xls{table-layout:auto; font-size:8.5pt; width:100%}
+  .xls td,.xls th{padding:4px 5px}
+  tfoot{display:table-row-group}
+  body.wide .wrap{page:wide}
+  .wrap{width:100% !important; padding:0}
+  .card,.row,.step,.kpi,.foot,.ref,.concl{break-inside:avoid; page-break-inside:avoid}
+  .headline{background:#fff !important; color:#000 !important; border:1.5px solid #191f28}
+  .sec{margin-top:18px}
+  thead{display:table-header-group}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15.5V6.5A2.5 2.5 0 0 1 7.5 4H16"/></symbol>
+<symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9.5V4h10v5.5"/><path d="M7 18.5H5.5A2.5 2.5 0 0 1 3 16v-3.5A2.5 2.5 0 0 1 5.5 10h13A2.5 2.5 0 0 1 21 12.5V16a2.5 2.5 0 0 1-2.5 2.5H17"/><rect x="7" y="15" width="10" height="6" rx="1.5"/></symbol>
+<symbol id="i-crop" viewBox="0 0 24 24"><path d="M6 2v16h16"/><path d="M2 6h16v16"/></symbol>
+<symbol id="i-data" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M14.5 5.5 8 12l6.5 6.5"/></symbol>
+</svg>
+
+<div class="top">
+  <div class="topin">
+    <div class="brand" id="brand"></div>
+    <div class="seg">
+      <button id="tab-card" class="on" onclick="go('home')">요약</button>
+      <button id="tab-table" onclick="go('table')">표</button>
+    </div>
+    <button class="tbtn" onclick="reportMode()"><svg class="ico"><use href="#i-crop"/></svg> 보고서 모드</button>
+    <button class="tbtn" onclick="window.print()"><svg class="ico"><use href="#i-print"/></svg> 인쇄</button>
+    <button class="tbtn" onclick="openData()"><svg class="ico"><use href="#i-data"/></svg> 데이터</button>
+  </div>
+</div>
+
+<div class="wrap" id="app"></div>
+<button class="rx" onclick="reportMode()">보고서 모드 해제</button>
+<div class="toast" id="toast"></div>
+
+<dialog id="dlg"><div class="dlg" id="dlgbody"></div></dialog>
+
+<script>
+/*DATA*/
+
+/* ===== 공통 ===== */
+var S = {view:'home', issue:null, party:'all', kind:'all'};
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function mark(t, hl){
+  var s = esc(t);
+  (hl||[]).forEach(function(h){
+    if(!h) return;
+    var e = esc(h).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    s = s.replace(new RegExp(e,'g'), '$&');
+  });
+  return s.replace(//g,'<mark>').replace(//g,'</mark>');
+}
+function won(n){
+  if(!n) return '0원';
+  if(n % 10000 === 0) return (n/10000).toLocaleString('ko-KR') + '만원';
+  return n.toLocaleString('ko-KR') + '원';
+}
+function lawOf(id){ for(var i=0;i<DATA.laws.length;i++) if(DATA.laws[i].id===id) return DATA.laws[i]; return {name:'(출처 미등록)',eff:'현행',no:''}; }
+function kcolor(id){ for(var i=0;i<DATA.kinds.length;i++) if(DATA.kinds[i].id===id) return DATA.kinds[i].color || 'gray'; return 'gray'; }
+function labelOf(arr, id){ for(var i=0;i<arr.length;i++) if(arr[i].id===id) return arr[i].label; return id; }
+function toast(m){ var t=$('toast'); t.textContent=m; t.className='toast on'; setTimeout(function(){ t.className='toast'; }, 1600); }
+function copy(text){
+  var ok = false;
+  try{
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly','');
+    ta.style.cssText = 'position:fixed;top:0;left:-9999px;opacity:0';
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, ta.value.length);
+    ok = document.execCommand('copy'); document.body.removeChild(ta);
+  }catch(e){ ok = false; }
+  if(!ok && navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){ toast('복사했습니다'); }, function(){ showText(text); });
+    return;
+  }
+  if(ok) toast('복사했습니다'); else showText(text);
+}
+
+/* ===== 집계 ===== */
+function sumBy(party, list){
+  var s = 0;
+  (list || DATA.issues).forEach(function(i){ if(i.party===party && i.sum) s += (i.amount||0); });
+  return s;
+}
+function totals(list){
+  var out = [];
+  DATA.parties.forEach(function(p){ var v = sumBy(p.id, list); if(v > 0) out.push({id:p.id, label:p.label, sum:v}); });
+  return out;
+}
+function hasSum(){ for(var i=0;i<DATA.issues.length;i++) if(DATA.issues[i].sum) return true; return false; }
+function grand(list){ var g = 0; totals(list).forEach(function(t){ g += t.sum; }); return g; }
+function cntCheck(){ var c=0; DATA.issues.forEach(function(i){ if(i.certainty!=='확정' && i.certainty!=='해당 없음') c++; }); return c; }
+
+/* ===== 화면: 홈 ===== */
+function viewHome(){
+  var m = DATA.meta, h = '';
+  h += '<div class="capnote">캡처 영역 · 800px</div>';
+  h += '<div class="card hero">'
+     +   '<span class="st">'+esc(m.status)+'</span>'
+     +   '<h1>'+esc(m.title)+'</h1>'
+     +   '<p class="sub">'+esc(m.subtitle)+'</p>'
+     +   '<div class="metaline"><span>검토기관 <b>'+esc(m.org)+'</b></span><span>검토일 <b>'+esc(m.reviewedAt)+'</b></span><span>적용법령 <b>'+esc(m.basis)+'</b></span></div>'
+     + '</div>';
+  h += '<div class="headline">'+esc(m.headline)+'</div>';
+  var T = totals(), cells = kpi('검토 항목', DATA.issues.length, '건', '');
+  if(T.length <= 2){ T.forEach(function(t){ cells += kpi(t.label + ' 부담', t.sum/10000, '만원', 'r'); }); }
+  else { cells += kpi('금액 합계', grand()/10000, '만원', 'r'); }
+  cells += kpi('추가 확인 필요', cntCheck(), '건', 'b');
+  h += '<div class="sec"><div class="sec-h">한눈에 보기</div><div class="kpis" style="grid-template-columns:repeat('
+     + (T.length <= 2 ? T.length + 2 : 3) + ',1fr)">' + cells + '</div></div>';
+  h += '<div class="sec"><div class="sec-h">검토 항목</div>' + chips() + list() + '</div>';
+  h += foot();
+  h += '<div class="act">'
+     + '<button class="btn" onclick="copyAll()"><svg class="ico"><use href="#i-copy"/></svg> 검토서 전체 복사</button>'
+     + '<button class="btn s" onclick="go(\'table\')">표로 보기</button>'
+     + '</div>'
+     + '<p class="hint">항목을 누르면 법률 → 시행령ㆍ규칙 → 처분기준 → 예외확인 순서로 근거 원문이 펼쳐집니다. '
+     + '보고서에 붙일 때는 <b>보고서 모드</b>를 켜고 브라우저를 150~200%로 확대한 뒤 캡처하십시오.</p>';
+  return h;
+}
+function kpi(l, v, u, cls){
+  var vv = (typeof v === 'number') ? v.toLocaleString('ko-KR') : v;
+  return '<div class="kpi '+cls+'"><div class="l">'+esc(l)+'</div><div class="v num">'+vv+'<span class="u">'+esc(u)+'</span></div></div>';
+}
+function chips(){
+  var h = '<div class="chips">';
+  h += '<button class="chip'+(S.party==='all'?' on':'')+'" onclick="setF(\'party\',\'all\')">전체</button>';
+  DATA.parties.forEach(function(p){ h += '<button class="chip'+(S.party===p.id?' on':'')+'" onclick="setF(\'party\',\''+p.id+'\')">'+esc(p.label)+'</button>'; });
+  h += '<span style="width:10px"></span>';
+  DATA.kinds.forEach(function(k){ h += '<button class="chip'+(S.kind===k.id?' on':'')+'" onclick="setF(\'kind\',\''+k.id+'\')">'+esc(k.label)+'</button>'; });
+  return h + '</div>';
+}
+function shown(){
+  return DATA.issues.filter(function(i){
+    return (S.party==='all'||i.party===S.party) && (S.kind==='all'||i.kind===S.kind);
+  });
+}
+function setF(k, v){ S[k] = (S[k]===v ? 'all' : v); render(); }
+function list(){
+  var h = '';
+  shown().forEach(function(i){
+    var labels = [];
+    i.steps.forEach(function(s){ (s.refs||[]).forEach(function(r){ if(labels.length<3) labels.push(r.label.split(' — ')[0]); }); });
+    h += '<button class="row" onclick="openIssue(\''+i.id+'\')">'
+       +  '<div class="l1"><span class="badge seq">'+esc(i.seq)+'</span>'
+       +    '<span class="badge">'+esc(labelOf(DATA.parties,i.party))+'</span>'
+       +    '<span class="badge">'+esc(labelOf(DATA.kinds,i.kind))+'</span>'
+       +    (i.change ? '<span class="badge ch">금액 변경 '+esc(i.change.before)+' → '+esc(i.change.after)+'</span>' : '')
+       +  '</div>'
+       +  '<div class="l2"><h3>'+esc(i.title)+'</h3>'
+       +    (i.sum || !hasSum() ? '' : '<span class="ex">합산 제외</span>')
+       +    '<span class="amt c-'+kcolor(i.kind)+'">'+esc(i.display)+'</span></div>'
+       +  (i.note ? '<div class="l3">'+esc(i.note)+'</div>' : '')
+       +  '<div class="refs">'+labels.map(function(l){ return '<span class="pill">'+esc(l)+'</span>'; }).join('')+'</div>'
+       +  '<div class="go">근거 원문 보기 →</div>'
+       + '</button>';
+  });
+  return h;
+}
+function foot(){
+  var h = '<div class="foot"><h4>적용 법령</h4><div class="ll">';
+  DATA.laws.forEach(function(l){ h += '<span>'+esc(l.name)+(l.eff!=='현행'?' [시행 '+esc(l.eff)+']':'')+(l.no?' '+esc(l.no):'')+'</span>'; });
+  h += '</div><p style="margin-top:12px">'+esc(DATA.meta.disclaimer)+'</p></div>';
+  return h;
+}
+
+/* ===== 화면: 상세 ===== */
+function openIssue(id){ S.issue = id; go('detail'); }
+function viewDetail(){
+  var i = null;
+  DATA.issues.forEach(function(x){ if(x.id===S.issue) i = x; });
+  if(!i) return viewHome();
+  var h = '<button class="back" onclick="go(\'home\')"><svg class="ico"><use href="#i-back"/></svg> 목록</button>';
+  h += '<div class="capnote">캡처 영역 · 800px</div>';
+  h += '<div class="phead">'+esc(DATA.meta.title)+' · '+esc(DATA.meta.subtitle)+' · '+esc(DATA.meta.org)+' · 검토일 '+esc(DATA.meta.reviewedAt)+'</div>';
+  h += '<div class="card dhead">'
+     +  '<div class="l1"><span class="badge seq">'+esc(i.seq)+'</span> <span class="badge">'+esc(labelOf(DATA.parties,i.party))+'</span> <span class="badge">'+esc(labelOf(DATA.kinds,i.kind))+'</span></div>'
+     +  '<h2>'+esc(i.title)+'</h2>'
+     +  '<p class="q">'+esc(i.question)+'</p>'
+     +  '<div class="dres"><span class="big amt c-'+kcolor(i.kind)+'">'+esc(i.display)+'</span><span class="cert">'+esc(i.certainty)+'</span></div>';
+  if(i.note) h += '<div class="dnote"><span class="k">단서</span>'+esc(i.note)+'</div>';
+  if(i.conds && i.conds.length) h += '<div class="dnote"><span class="k">확인이 필요한 사실</span>'+i.conds.map(esc).join('<br>')+'</div>';
+  if(i.change) h += '<div class="dnote"><span class="k">이전 검토 대비 변경</span>'+esc(i.change.before)+' → <b>'+esc(i.change.after)+'</b><br>'+esc(i.change.why)+'</div>';
+  h += '</div>';
+
+  i.steps.forEach(function(s, n){
+    if(s.arrow) h += '<div class="arrow"><span class="bar"></span>'+esc(s.arrow)+'</div>';
+    else if(n>0) h += '<div class="arrow"><span class="bar"></span></div>';
+    h += '<div class="step"><div class="sh"><span class="n">'+(n+1)+'</span><span class="t">'+esc(s.title || DATA.cols[s.col] || '근거')+'</span></div>';
+    h += '<p class="gist">'+esc(s.gist)+'</p>';
+    (s.refs||[]).forEach(function(r){ h += refHtml(r); });
+    if(s.note) h += '<p class="hint">'+esc(s.note)+'</p>';
+    h += '</div>';
+  });
+
+  h += '<div class="concl"><div class="k">결론</div><div class="v">'+esc(i.title)+' — '+esc(i.display)+' ('+esc(labelOf(DATA.kinds,i.kind))+', '+esc(labelOf(DATA.parties,i.party))+')</div>'
+     + (i.note ? '<div class="m">'+esc(i.note)+'</div>' : '') + '</div>';
+  var arr = DATA.issues, at = -1;
+  arr.forEach(function(x, n){ if(x.id===i.id) at = n; });
+  h += '<div class="act"><button class="btn" onclick="copyIssue(\''+i.id+'\')"><svg class="ico"><use href="#i-copy"/></svg> 이 항목 보고서용 복사</button>'
+     + (at > 0 ? '<button class="btn s" onclick="openIssue(\''+arr[at-1].id+'\')">← '+esc(arr[at-1].seq)+' '+esc(arr[at-1].title)+'</button>' : '')
+     + (at >= 0 && at < arr.length-1 ? '<button class="btn s" onclick="openIssue(\''+arr[at+1].id+'\')">'+esc(arr[at+1].seq)+' '+esc(arr[at+1].title)+' →</button>' : '')
+     + '</div>';
+  return h;
+}
+function refHtml(r){
+  var L = lawOf(r.law);
+  var src = L.name + (L.eff!=='현행' ? ' [시행 '+L.eff+']' : '');
+  var h = '<div class="ref"><div class="rl"><span>'+esc(r.label)+'</span><span class="rs">'+esc(src)+'</span></div>';
+  if(r.cols){
+    if(r.cap) h += '<div class="refcap">'+esc(r.cap)+'</div>';
+    h += '<div style="padding:10px 14px 14px"><table class="lawtbl"><colgroup>';
+    r.cols.forEach(function(c, ci){
+      if(ci===0){ h += '<col>'; return; }
+      if(ci===1){ h += '<col style="width:132px">'; return; }
+      var mx = c.length;
+      r.rows.forEach(function(rw){ mx = Math.max(mx, String(rw[ci]||'').length); });
+      h += '<col style="width:'+Math.max(46, Math.min(118, mx*12+16))+'px">';
+    });
+    h += '</colgroup><thead><tr>';
+    r.cols.forEach(function(c){ h += '<th>'+esc(c)+'</th>'; });
+    h += '</tr></thead><tbody>';
+    r.rows.forEach(function(row, ri){
+      h += '<tr'+((r.hlrow||[]).indexOf(ri)>=0?' class="hl"':'')+'>';
+      row.forEach(function(c, ci){ h += '<td'+(ci>=2?' class="n"':'')+'>'+esc(c)+'</td>'; });
+      h += '</tr>';
+    });
+    h += '</tbody></table></div>';
+  } else {
+    h += '<div class="rt">';
+    (r.ps||[]).forEach(function(p){ h += '<p>' + mark(p, r.hl).replace(/&lt;(개정|신설|전문개정)[^&]*&gt;/g, function(m){ return '<span class="amd">' + m + '</span>'; }) + '</p>'; });
+    h += '</div>';
+  }
+  if(r.note) h += '<div class="rn">'+(/^단위/.test(r.note) ? '' : '<b>확인</b> · ')+esc(r.note)+'</div>';
+  return h + '</div>';
+}
+
+/* ===== 화면: 표 ===== */
+function viewTable(){
+  var h = '<div class="capnote">캡처 영역 · 1120px</div>';
+  h += '<div class="card" style="padding:20px 22px"><h1 style="font-size:21px">'+esc(DATA.meta.title)+'</h1>'
+     + '<p class="sub" style="color:var(--g600);font-size:14px;margin-top:4px">'+esc(DATA.meta.subtitle)+' · 검토일 '+esc(DATA.meta.reviewedAt)+' · '+esc(DATA.meta.basis)+'</p></div>';
+  h += '<table class="xls"><thead><tr>'
+     + '<th style="width:44px">번호</th><th style="width:84px">대상</th><th style="width:180px">검토 항목</th><th style="width:74px">유형</th>'
+     + '<th style="width:96px">결론</th><th>주요 근거</th><th style="width:78px">확정도</th><th style="width:210px">단서ㆍ확인사항</th>'
+     + '</tr></thead><tbody>';
+  shown().forEach(function(i){
+    var labels = [];
+    i.steps.forEach(function(s){ (s.refs||[]).forEach(function(r){ labels.push(r.label.split(' — ')[0]); }); });
+    h += '<tr>'
+       + '<td class="c">'+esc(i.seq)+'</td>'
+       + '<td class="c">'+esc(labelOf(DATA.parties,i.party))+'</td>'
+       + '<td class="tt" onclick="openIssue(\''+i.id+'\')">'+esc(i.title)+'</td>'
+       + '<td class="c">'+esc(labelOf(DATA.kinds,i.kind))+'</td>'
+       + '<td class="amt2">'+esc(i.display)+(i.sum || !hasSum() ? '' : '<br><span class="ex">합산 제외</span>')+'</td>'
+       + '<td style="font-size:13px;color:var(--g600)">'+esc(labels.slice(0,6).join(' · '))+'</td>'
+       + '<td class="c">'+esc(i.certainty)+'</td>'
+       + '<td style="font-size:13px">'+esc([i.note].concat(i.conds||[]).filter(Boolean).join(' / '))+'</td>'
+       + '</tr>';
+  });
+  var L = shown(), skip = L.filter(function(i){ return !i.sum; }).length;
+  h += '</tbody>';
+  if(hasSum()) h += '<tfoot><tr><td colspan="4" class="c">합계 ('+(S.party==='all'&&S.kind==='all'?'':'선택한 항목 ')+'합산 대상)</td>'
+     + '<td class="amt2">'+won(grand(L))+'</td>'
+     + '<td colspan="3" style="font-size:13px;color:var(--g600)">'
+     + (totals(L).map(function(t){ return t.label+' '+won(t.sum); }).join(' + ') || '합산 대상 없음')
+     + (skip ? ' · 합산 제외 '+skip+'건은 결론 칸 옆의 표시를 확인하십시오.' : '')
+     + '</td></tr></tfoot>';
+  h += '</table>';
+  h += '<div class="act"><button class="btn" onclick="copyTSV()"><svg class="ico"><use href="#i-copy"/></svg> 엑셀ㆍ한글 표로 복사 (TSV)</button>'
+     + '<button class="btn s" onclick="go(\'home\')">요약으로</button></div>';
+  h += foot();
+  return h;
+}
+
+/* ===== 복사 ===== */
+function issueText(i){
+  var t = '[' + i.seq + '] ' + i.title + ' (' + labelOf(DATA.parties,i.party) + ' / ' + labelOf(DATA.kinds,i.kind) + ')\n';
+  t += '  ○ 결론: ' + i.display + ' (' + i.certainty + ')\n';
+  if(i.note) t += '  ○ 단서: ' + i.note + '\n';
+  if(i.conds && i.conds.length) t += '  ○ 확인사항: ' + i.conds.join(' / ') + '\n';
+  i.steps.forEach(function(s){
+    t += '  ○ ' + (s.title || DATA.cols[s.col] || '근거').replace(/^[①-⑳]\s/,'') + '\n     - ' + s.gist + '\n';
+    (s.refs||[]).forEach(function(r){ t += '     · ' + r.label + '\n'; });
+  });
+  return t;
+}
+function copyIssue(id){ DATA.issues.forEach(function(i){ if(i.id===id) copy(issueText(i)); }); }
+function copyAll(){
+  var m = DATA.meta;
+  var t = m.title + '\n' + m.subtitle + '\n검토일 ' + m.reviewedAt + ' · ' + m.org + ' · ' + m.basis + '\n\n';
+  t += '□ 검토 결론\n  ' + m.headline + '\n  - ' + totals().map(function(x){ return x.label + ' ' + won(x.sum); }).join(' / ') + '\n\n';
+  t += '□ 항목별 검토\n';
+  DATA.issues.forEach(function(i){ t += issueText(i) + '\n'; });
+  t += '□ 적용 법령\n';
+  DATA.laws.forEach(function(l){ t += '  - ' + l.name + (l.eff!=='현행' ? ' [시행 ' + l.eff + ']' : '') + (l.no ? ' ' + l.no : '') + '\n'; });
+  t += '\n※ ' + m.disclaimer + '\n';
+  copy(t);
+}
+function copyTSV(){
+  var rows = [['번호','대상','검토 항목','유형','결론','주요 근거','확정도','단서ㆍ확인사항']];
+  shown().forEach(function(i){
+    var labels = [];
+    i.steps.forEach(function(s){ (s.refs||[]).forEach(function(r){ labels.push(r.label.split(' — ')[0]); }); });
+    rows.push([i.seq, labelOf(DATA.parties,i.party), i.title, labelOf(DATA.kinds,i.kind), i.display,
+               labels.slice(0,6).join(' · '), i.certainty, [i.note].concat(i.conds||[]).filter(Boolean).join(' / ')]);
+  });
+  copy(rows.map(function(r){ return r.join('\t'); }).join('\n'));
+}
+function showText(t){
+  $('dlgbody').innerHTML = '<h3>복사용 텍스트</h3><p>자동 복사가 막혀 있습니다. 아래 내용을 직접 선택해 복사하십시오.</p>'
+    + '<textarea id="ta"></textarea><div class="act"><button class="btn" onclick="dlg.close()">닫기</button></div>';
+  $('ta').value = t; $('dlg').showModal(); $('ta').select();
+}
+
+/* ===== 데이터 교체 ===== */
+function openData(){
+  $('dlgbody').innerHTML = '<h3>검토 데이터</h3>'
+   + '<p>이 화면은 법률 검토 내용을 담은 JSON 파일 하나로 움직입니다. 다른 검토 건의 JSON을 불러오면 같은 화면이 그대로 만들어집니다.</p>'
+   + '<div class="drop" id="drop">여기에 JSON 파일을 끌어다 놓거나<br><br><input type="file" id="fin" accept=".json,application/json"></div>'
+   + '<div class="act"><button class="btn s" onclick="dumpJson()">지금 데이터 내려받기 (서식용)</button><button class="btn" onclick="dlg.close()">닫기</button></div>';
+  $('dlg').showModal();
+  $('fin').addEventListener('change', function(e){ if(e.target.files[0]) readJson(e.target.files[0]); });
+  var d = $('drop');
+  ['dragenter','dragover'].forEach(function(t){ d.addEventListener(t, function(e){ e.preventDefault(); e.stopPropagation(); d.className='drop over'; }); });
+  ['dragleave','drop'].forEach(function(t){ d.addEventListener(t, function(e){ e.preventDefault(); e.stopPropagation(); d.className='drop'; }); });
+  d.addEventListener('drop', function(e){ if(e.dataTransfer.files[0]) readJson(e.dataTransfer.files[0]); });
+}
+function readJson(f){
+  var r = new FileReader();
+  r.onload = function(){
+    try{
+      var o = JSON.parse(String(r.result).replace(/^﻿/,''));
+      ['meta','laws','parties','kinds','cols','issues'].forEach(function(k){ if(!o[k]) throw new Error('"'+k+'" 항목이 없습니다'); });
+      if(!o.issues.length) throw new Error('issues가 비어 있습니다');
+      DATA = o; S = {view:'home', issue:null, party:'all', kind:'all'};
+      $('dlg').close(); render(); toast('불러왔습니다');
+    }catch(e){ alert('JSON을 읽지 못했습니다: ' + e.message); }
+  };
+  r.onerror = function(){ alert('파일을 읽지 못했습니다.'); };
+  r.readAsText(f, 'utf-8');
+}
+function dumpJson(){
+  var b = new Blob([JSON.stringify(DATA, null, 1)], {type:'application/json;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(b); a.download = (DATA.meta.title || '법률검토') + '.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+}
+
+/* ===== 라우팅 ===== */
+function go(v){ S.view = v; if(v!=='detail') S.issue = null; window.scrollTo(0,0); render(); }
+function reportMode(){
+  document.body.classList.toggle('report');
+  toast(document.body.classList.contains('report') ? '보고서 모드 — 캡처 후 다시 눌러 해제하십시오' : '보고서 모드 해제');
+}
+function render(){
+  document.body.className = document.body.classList.contains('report') ? 'report' : '';
+  if(S.view==='table') document.body.classList.add('wide');
+  $('brand').innerHTML = esc(DATA.meta.title) + '<small>' + esc(DATA.meta.subtitle) + '</small>';
+  document.title = DATA.meta.title;
+  $('tab-card').className = (S.view!=='table' ? 'on' : '');
+  $('tab-table').className = (S.view==='table' ? 'on' : '');
+  $('app').innerHTML = S.view==='table' ? viewTable() : (S.view==='detail' ? viewDetail() : viewHome());
+}
+document.addEventListener('keydown', function(e){
+  if(e.key!=='Escape') return;
+  if(document.body.classList.contains('report')){ reportMode(); return; }
+  if(S.view==='detail') go('home');
+});
+render();
+</script>
+</body>
+</html>
