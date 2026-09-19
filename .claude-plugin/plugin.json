@@ -1,0 +1,9 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "law-review-viewer",
+  "version": "1.0.0",
+  "description": "법률 검토 결과를 토스풍 단일 HTML 화면으로 만드는 스킬과, 국가법령정보 조회용 MCP 서버를 함께 제공한다.",
+  "author": {
+    "name": "천종하"
+  }
+}
