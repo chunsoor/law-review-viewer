@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "law": {
+      "command": "python",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/mcp/server.py"
+      ],
+      "env": {
+        "LAW_OC": "${LAW_OC}",
+        "LAW_REFERER": "${LAW_REFERER}"
+      }
+    }
+  }
+}
