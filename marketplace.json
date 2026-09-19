@@ -1,0 +1,15 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "chunsoor-law",
+  "owner": {
+    "name": "천종하"
+  },
+  "description": "천종하(제천시 교통과)가 쓰는 법률 검토 도구 모음",
+  "plugins": [
+    {
+      "name": "law-review-viewer",
+      "source": "./",
+      "description": "법률 검토 결과를 단일 HTML 화면으로 만드는 스킬 + 국가법령정보 조회 MCP"
+    }
+  ]
+}
